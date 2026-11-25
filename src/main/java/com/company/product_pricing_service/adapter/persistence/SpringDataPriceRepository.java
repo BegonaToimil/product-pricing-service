@@ -9,6 +9,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface SpringDataPriceRepository extends JpaRepository<PriceEntity, Long> {
+    /**
+     * Finds matching prices and sorts them by descending priority.
+     *
+     * @param productId identifier of the requested product
+     * @param brandId identifier of the requested brand
+     * @param applicationDate date and time for which the price is requested
+     * @param pageable limits the result to the highest-priority match
+     * @return matching price records ordered from highest to lowest priority
+     */
     @Query("""
             select price from PriceEntity price
             where price.productId = :productId

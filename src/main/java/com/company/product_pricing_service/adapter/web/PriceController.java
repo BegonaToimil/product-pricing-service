@@ -27,6 +27,14 @@ public class PriceController {
         this.getApplicablePriceUseCase = getApplicablePriceUseCase;
     }
 
+    /**
+     * Finds the applicable price for the supplied product, brand, and date.
+     *
+     * @param applicationDate date and time for which the price is requested
+     * @param productId identifier of the requested product
+     * @param brandId identifier of the requested brand
+     * @return applicable price details
+     */
     @GetMapping
     public PriceResponse getApplicablePrice(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applicationDate,

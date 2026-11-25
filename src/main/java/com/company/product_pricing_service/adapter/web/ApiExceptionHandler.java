@@ -19,6 +19,12 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 public class ApiExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
+    /**
+     * Converts a missing applicable price into a 404 Problem Detail response.
+     *
+     * @param exception price lookup exception
+     * @return 404 problem response
+     */
     @ExceptionHandler(PriceNotFoundException.class)
     public ProblemDetail handlePriceNotFound(PriceNotFoundException exception) {
         log.warn("No applicable price found: {}", exception.getMessage());
@@ -27,6 +33,12 @@ public class ApiExceptionHandler {
         return problem;
     }
 
+    /**
+     * Converts missing or invalid request parameters into a 400 Problem Detail response.
+     *
+     * @param exception validation or binding exception
+     * @return 400 problem response
+     */
     @ExceptionHandler({
             ConstraintViolationException.class,
             MethodArgumentTypeMismatchException.class,
@@ -43,6 +55,12 @@ public class ApiExceptionHandler {
         return problem;
     }
 
+    /**
+     * Converts a persistence failure into a safe 500 Problem Detail response.
+     *
+     * @param exception persistence exception
+     * @return 500 problem response
+     */
     @ExceptionHandler(DataAccessException.class)
     public ProblemDetail handlePersistenceFailure(DataAccessException exception) {
         log.error("Price persistence operation failed", exception);
@@ -54,6 +72,12 @@ public class ApiExceptionHandler {
         return problem;
     }
 
+    /**
+     * Preserves framework HTTP errors or converts unexpected failures into 500 responses.
+     *
+     * @param exception unexpected or framework exception
+     * @return corresponding HTTP problem response
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleUnexpectedFailure(Exception exception) {
         if (exception instanceof ErrorResponse errorResponse) {
